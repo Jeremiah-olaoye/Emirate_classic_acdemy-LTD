@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduTrack Pro — School Result Management System</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Scripts moved to end of body for correct load order -->
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==================== MOBILE OVERLAY ==================== -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ==================== LEFT SIDEBAR ==================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="10" fill="#3B82F6"/>
+          <path d="M8 22 L16 10 L24 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="16" cy="10" r="2.5" fill="white"/>
+          <rect x="10" y="20" width="12" height="2.5" rx="1.25" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">EduTrack</span>
+        <span class="logo-tag">Pro</span>
+      </div>
+    </div>
+
+    <!-- School Info Strip -->
+    <div class="school-strip">
+      <div class="school-avatar">GHS</div>
+      <div class="school-info">
+        <span class="school-name">Government High School</span>
+        <span class="school-session">2024/2025 Session</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-page="dashboard">
+          <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
+          <span class="nav-label">Dashboard</span>
+          <span class="nav-badge">New</span>
+        </li>
+        <li class="nav-item" data-page="students">
+          <span class="nav-icon"><i data-lucide="users"></i></span>
+          <span class="nav-label">Students</span>
+          <span class="nav-count">482</span>
+        </li>
+        <li class="nav-item" data-page="results">
+          <span class="nav-icon"><i data-lucide="file-text"></i></span>
+          <span class="nav-label">Results</span>
+          <span class="nav-count">1,240</span>
+        </li>
+        <li class="nav-item" data-page="subjects">
+          <span class="nav-icon"><i data-lucide="book-open"></i></span>
+          <span class="nav-label">Subjects</span>
+        </li>
+        <li class="nav-item" data-page="teachers">
+          <span class="nav-icon"><i data-lucide="user-check"></i></span>
+          <span class="nav-label">Teachers</span>
+        </li>
+      </ul>
+
+      <div class="nav-section-label">Analytics</div>
+      <ul class="nav-list">
+        <li class="nav-item" data-page="attendance">
+          <span class="nav-icon"><i data-lucide="calendar-check"></i></span>
+          <span class="nav-label">Attendance</span>
+        </li>
+        <li class="nav-item" data-page="analytics">
+          <span class="nav-icon"><i data-lucide="bar-chart-3"></i></span>
+          <span class="nav-label">Analytics</span>
+        </li>
+        <li class="nav-item" data-page="report">
+          <span class="nav-icon"><i data-lucide="printer"></i></span>
+          <span class="nav-label">Report Card</span>
+        </li>
+      </ul>
+
+      <div class="nav-section-label">System</div>
+      <ul class="nav-list">
+        <li class="nav-item" data-page="messages">
+          <span class="nav-icon"><i data-lucide="message-square"></i></span>
+          <span class="nav-label">Messages</span>
+          <span class="nav-alert">3</span>
+        </li>
+        <li class="nav-item" data-page="settings">
+          <span class="nav-icon"><i data-lucide="settings"></i></span>
+          <span class="nav-label">Settings</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user" data-page-link="settings">
+        <div class="user-avatar-sm">
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=b6e3f4" alt="Admin" />
+        </div>
+        <div class="user-details">
+          <span class="user-name-sm">Mr. Adebayo K.</span>
+          <span class="user-role-sm">Administrator</span>
+        </div>
+        <span class="user-arrow" data-action="logout" title="Logout" style="cursor:pointer"><i data-lucide="log-out"></i></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT AREA ==================== -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ==================== TOP NAVBAR ==================== -->
+    <header class="topbar" id="topbar">
+      <!-- Left: Hamburger + Breadcrumb -->
+      <div class="topbar-left">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle sidebar">
+          <i data-lucide="menu"></i>
+        </button>
+        <nav class="breadcrumb" id="breadcrumb">
+          <span class="bc-home"><i data-lucide="home"></i></span>
+          <span class="bc-sep">/</span>
+          <span class="bc-current" id="bcCurrent">Dashboard</span>
+        </nav>
+      </div>
+
+      <!-- Right: Search + Actions -->
+      <div class="topbar-right">
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" class="search-input" placeholder="Search students, results…" id="globalSearch" />
+          <kbd class="search-kbd">⌘K</kbd>
+        </div>
+
+        <!-- Notification Bell -->
+        <button class="icon-btn" id="notifBtn" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <!-- Dark Mode Toggle -->
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <i data-lucide="moon" class="icon-moon"></i>
+          <i data-lucide="sun" class="icon-sun" style="display:none"></i>
+        </button>
+
+        <!-- Admin Profile -->
+        <div class="admin-profile" id="adminProfileBtn">
+          <div class="admin-avatar">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=b6e3f4" alt="Admin" />
+          </div>
+          <div class="admin-info">
+            <span class="admin-name">Mr. Adebayo</span>
+            <span class="admin-role">Super Admin</span>
+          </div>
+          <i data-lucide="chevron-down" class="admin-caret"></i>
+
+          <!-- Admin Dropdown -->
+          <div class="admin-dropdown" id="adminDropdown">
+            <div class="dropdown-header">
+              <span class="dh-name">Adebayo Kolawole</span>
+              <span class="dh-email">admin@ghs.edu.ng</span>
+            </div>
+            <ul class="dropdown-list">
+              <li data-page-link="settings"><i data-lucide="user"></i> My Profile</li>
+              <li><i data-lucide="shield"></i> Security</li>
+              <li data-page-link="settings"><i data-lucide="settings"></i> Preferences</li>
+              <li class="dropdown-divider"></li>
+              <li class="text-danger"><i data-lucide="log-out"></i> Logout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== PAGE CONTENT WRAPPER ==================== -->
+    <div class="page-wrapper">
+
+      <!-- ======== DASHBOARD PAGE ======== -->
+      <section class="page active" id="page-dashboard">
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="ph-left">
+            <h1 class="page-title">Good morning, Mr. Adebayo 👋</h1>
+            <p class="page-subtitle">Here's what's happening in your school today — 3rd Term, 2024/2025 Session.</p>
+          </div>
+          <div class="ph-right">
+            <button class="btn btn-outline"><i data-lucide="download"></i> Export Report</button>
+            <button class="btn btn-primary"><i data-lucide="plus"></i> Add Result</button>
+          </div>
+        </div>
+
+        <!-- ---- Stats Cards ---- -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--card-accent:#3B82F6">
+            <div class="stat-icon" style="background:rgba(59,130,246,.15); color:#3B82F6">
+              <i data-lucide="users"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Total Students</span>
+              <span class="stat-value" data-count="482" data-stat="stat-students">482</span>
+              <span class="stat-trend up"><i data-lucide="trending-up"></i> +12 this term</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline1" width="80" height="40"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" style="--card-accent:#7C3AED">
+            <div class="stat-icon" style="background:rgba(124,58,237,.15); color:#7C3AED">
+              <i data-lucide="file-text"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Total Results</span>
+              <span class="stat-value" data-count="1240" data-stat="stat-results">1,240</span>
+              <span class="stat-trend up"><i data-lucide="trending-up"></i> +85 uploaded</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline2" width="80" height="40"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" style="--card-accent:#22C55E">
+            <div class="stat-icon" style="background:rgba(34,197,94,.15); color:#22C55E">
+              <i data-lucide="bar-chart-2"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Avg. Performance</span>
+              <span class="stat-value" data-count="72" data-stat="stat-avg">72%</span>
+              <span class="stat-trend up"><i data-lucide="trending-up"></i> +4.2% vs last term</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline3" width="80" height="40"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" style="--card-accent:#22C55E">
+            <div class="stat-icon" style="background:rgba(34,197,94,.15); color:#22C55E">
+              <i data-lucide="check-circle"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Passed Students</span>
+              <span class="stat-value" data-count="398" data-stat="stat-passed">398</span>
+              <span class="stat-trend up"><i data-lucide="trending-up"></i> 82.6% pass rate</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline4" width="80" height="40"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" style="--card-accent:#EF4444">
+            <div class="stat-icon" style="background:rgba(239,68,68,.15); color:#EF4444">
+              <i data-lucide="x-circle"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Failed Students</span>
+              <span class="stat-value" data-count="84" data-stat="stat-failed">84</span>
+              <span class="stat-trend down"><i data-lucide="trending-down"></i> -5 vs last term</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline5" width="80" height="40"></canvas>
+            </div>
+          </div>
+
+          <div class="stat-card" style="--card-accent:#F59E0B">
+            <div class="stat-icon" style="background:rgba(245,158,11,.15); color:#F59E0B">
+              <i data-lucide="calendar-check"></i>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Attendance Rate</span>
+              <span class="stat-value" data-count="91" data-stat="stat-attendance">91%</span>
+              <span class="stat-trend up"><i data-lucide="trending-up"></i> Above target</span>
+            </div>
+            <div class="stat-sparkline">
+              <canvas id="sparkline6" width="80" height="40"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Charts Row ---- -->
+        <div class="charts-row">
+          <!-- Performance Chart -->
+          <div class="chart-card wide">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">Performance Overview</h3>
+                <p class="chart-subtitle">Average scores per subject — 3rd Term 2024/2025</p>
+              </div>
+              <div class="chart-actions">
+                <button class="btn-chip active">This Term</button>
+                <button class="btn-chip">Last Term</button>
+              </div>
+            </div>
+            <div class="chart-body">
+              <canvas id="performanceChart" height="120"></canvas>
+            </div>
+          </div>
+
+          <!-- Grade Distribution -->
+          <div class="chart-card narrow">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">Grade Distribution</h3>
+                <p class="chart-subtitle">All classes combined</p>
+              </div>
+            </div>
+            <div class="chart-body chart-donut-wrap">
+              <canvas id="gradeChart" height="160"></canvas>
+              <div class="donut-legend">
+                <div class="dl-item"><span class="dl-dot" style="background:#3B82F6"></span> A (80–100): 22%</div>
+                <div class="dl-item"><span class="dl-dot" style="background:#22C55E"></span> B (65–79): 31%</div>
+                <div class="dl-item"><span class="dl-dot" style="background:#F59E0B"></span> C (50–64): 29%</div>
+                <div class="dl-item"><span class="dl-dot" style="background:#EF4444"></span> F (0–49): 18%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Table + Activity Row ---- -->
+        <div class="lower-row">
+
+          <!-- Results Table -->
+          <div class="table-card">
+            <div class="table-header">
+              <div class="th-left">
+                <h3 class="chart-title">Recent Results</h3>
+                <span class="table-count">Showing 8 of 1,240</span>
+              </div>
+              <div class="th-right">
+                <div class="tbl-search-wrap">
+                  <i data-lucide="search"></i>
+                  <input type="text" class="tbl-search" placeholder="Search student…" id="tableSearch" />
+                </div>
+                <select class="tbl-filter" id="classFilter">
+                  <option value="">All Classes</option>
+                  <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
+                  <option>SS 1</option><option>SS 2</option><option>SS 3</option>
+                </select>
+                <button class="btn btn-outline btn-sm" data-page-link="results">View All</button>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="data-table" id="resultsTable">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Subjects</th>
+                    <th>Total</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                  <!-- Rows injected by JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+              <button class="pg-btn" disabled><i data-lucide="chevron-left"></i></button>
+              <button class="pg-num active">1</button>
+              <button class="pg-num">2</button>
+              <button class="pg-num">3</button>
+              <span class="pg-ellipsis">…</span>
+              <button class="pg-num">12</button>
+              <button class="pg-btn"><i data-lucide="chevron-right"></i></button>
+            </div>
+          </div>
+
+          <!-- Activity Timeline -->
+          <div class="activity-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Activity Timeline</h3>
+              <button class="btn-link">View all</button>
+            </div>
+            <ul class="timeline">
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#3B82F6"><i data-lucide="upload"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text">Result uploaded for <strong>SS 2A</strong> — Mathematics</p>
+                  <span class="tl-time">2 min ago</span>
+                </div>
+              </li>
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#22C55E"><i data-lucide="user-plus"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text">New student <strong>Amaka Okafor</strong> enrolled in JSS 1B</p>
+                  <span class="tl-time">14 min ago</span>
+                </div>
+              </li>
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#F59E0B"><i data-lucide="edit-3"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text"><strong>Mr. Chukwu</strong> updated grades for SS 3 Physics</p>
+                  <span class="tl-time">1 hr ago</span>
+                </div>
+              </li>
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#7C3AED"><i data-lucide="printer"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text">Report card printed for <strong>Ibrahim Musa</strong></p>
+                  <span class="tl-time">2 hr ago</span>
+                </div>
+              </li>
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#EF4444"><i data-lucide="alert-triangle"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text">Low attendance alert — <strong>JSS 3C</strong> (below 75%)</p>
+                  <span class="tl-time">Yesterday</span>
+                </div>
+              </li>
+              <li class="tl-item">
+                <div class="tl-dot" style="background:#22C55E"><i data-lucide="check-circle"></i></div>
+                <div class="tl-body">
+                  <p class="tl-text">Term results approved by <strong>Principal Adaeze</strong></p>
+                  <span class="tl-time">Yesterday</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </section><!-- End Dashboard Page -->
+
+      <!-- ======== RESULTS PAGE ======== -->
+      <section class="page" id="page-results">
+        <div class="page-header">
+          <div class="ph-left">
+            <h1 class="page-title">Results Management</h1>
+            <p class="page-subtitle">View, upload, edit and manage all student results.</p>
+          </div>
+          <div class="ph-right">
+            <button class="btn btn-outline"><i data-lucide="filter"></i> Filter</button>
+            <button class="btn btn-primary"><i data-lucide="upload"></i> Upload Results</button>
+          </div>
+        </div>
+
+        <div class="table-card" style="margin-top:0">
+          <div class="table-header">
+            <div class="th-left">
+              <h3 class="chart-title">All Results</h3>
+              <span class="table-count">1,240 total records</span>
+            </div>
+            <div class="th-right">
+              <div class="tbl-search-wrap">
+                <i data-lucide="search"></i>
+                <input type="text" class="tbl-search" placeholder="Search…" />
+              </div>
+              <select class="tbl-filter"><option>All Classes</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select>
+              <select class="tbl-filter"><option>All Terms</option><option>1st Term</option><option>2nd Term</option><option>3rd Term</option></select>
+              <button class="btn btn-outline btn-sm"><i data-lucide="download"></i> Export</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>Student</th><th>Class</th><th>Subjects</th><th>Total</th><th>Average</th><th>Grade</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="fullResultsBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button class="pg-btn" disabled><i data-lucide="chevron-left"></i></button>
+            <button class="pg-num active">1</button><button class="pg-num">2</button><button class="pg-num">3</button>
+            <span class="pg-ellipsis">…</span><button class="pg-num">25</button>
+            <button class="pg-btn"><i data-lucide="chevron-right"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== REPORT CARD PAGE ======== -->
+      <section class="page" id="page-report">
+        <div class="page-header">
+          <div class="ph-left">
+            <h1 class="page-title">Report Card Generator</h1>
+            <p class="page-subtitle">Generate, preview and print student report cards.</p>
+          </div>
+          <div class="ph-right">
+            <button class="btn btn-outline"><i data-lucide="printer"></i> Print</button>
+            <button class="btn btn-primary"><i data-lucide="download"></i> Download PDF</button>
+          </div>
+        </div>
+
+        <div class="report-grid">
+          <!-- Left: Form Panel -->
+          <div class="report-form-panel">
+            <div class="rcard">
+              <h3 class="rcard-title"><i data-lucide="school"></i> School Details</h3>
+              <div class="logo-upload-area" id="logoUploadArea">
+                <i data-lucide="image"></i>
+                <span>Click to upload school logo</span>
+                <input type="file" accept="image/*" id="logoUpload" hidden />
+              </div>
+              <div class="form-group">
+                <label>School Name</label>
+                <input type="text" class="form-input" value="Government High School, Lagos" />
+              </div>
+              <div class="form-group">
+                <label>School Address</label>
+                <input type="text" class="form-input" value="12 Education Crescent, Lagos State" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Session</label>
+                  <select class="form-input"><option>2024/2025</option><option>2023/2024</option></select>
+                </div>
+                <div class="form-group">
+                  <label>Term</label>
+                  <select class="form-input" id="termSelect"><option>3rd Term</option><option>2nd Term</option><option>1st Term</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="rcard">
+              <h3 class="rcard-title"><i data-lucide="user"></i> Student Information</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" class="form-input" placeholder="e.g. Amaka" />
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" class="form-input" placeholder="e.g. Okafor" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Admission No.</label>
+                  <input type="text" class="form-input" placeholder="GHS/2024/001" />
+                </div>
+                <div class="form-group">
+                  <label>Class</label>
+                  <select class="form-input"><option>SS 2A</option><option>SS 1A</option><option>JSS 3B</option></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Gender</label>
+                  <select class="form-input"><option>Female</option><option>Male</option></select>
+                </div>
+                <div class="form-group">
+                  <label>Date of Birth</label>
+                  <input type="date" class="form-input" />
+                </div>
+              </div>
+            </div>
+
+            <div class="rcard">
+              <h3 class="rcard-title"><i data-lucide="book-open"></i> Subject Scores</h3>
+              <!-- Term Tabs -->
+              <div class="term-tabs">
+                <button class="term-tab active" data-term="1">1st Term</button>
+                <button class="term-tab" data-term="2">2nd Term</button>
+                <button class="term-tab" data-term="3">3rd Term</button>
+              </div>
+              <div class="scores-table-wrap">
+                <table class="scores-table">
+                  <thead><tr><th>Subject</th><th>CA (30)</th><th>Exam (70)</th><th>Total</th><th>Grade</th></tr></thead>
+                  <tbody id="scoresBody">
+                    <!-- injected by JS -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="score-summary">
+                <div class="ss-item"><span>Total Score</span><strong id="totalScore">0</strong></div>
+                <div class="ss-item"><span>Average</span><strong id="avgScore">0.00%</strong></div>
+                <div class="ss-item"><span>Overall Grade</span><strong id="overallGrade">—</strong></div>
+                <div class="ss-item"><span>Position</span><strong>—</strong></div>
+              </div>
+            </div>
+
+            <div class="rcard">
+              <h3 class="rcard-title"><i data-lucide="message-square"></i> Comments</h3>
+              <div class="form-group">
+                <label>Class Teacher's Comment</label>
+                <textarea class="form-input" rows="3" placeholder="Enter teacher's remark…"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Principal's Comment</label>
+                <textarea class="form-input" rows="3" placeholder="Enter principal's remark…"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Preview Panel -->
+          <div class="report-preview-panel">
+            <div class="preview-sticky">
+              <div class="preview-label"><i data-lucide="eye"></i> Live Preview</div>
+              <div class="report-card-preview" id="reportPreview">
+                <div class="rp-header">
+                  <div class="rp-logo-placeholder"><i data-lucide="school"></i></div>
+                  <div class="rp-school-info">
+                    <h2>Government High School, Lagos</h2>
+                    <p>12 Education Crescent, Lagos State</p>
+                    <p class="rp-term-badge">3rd Term Report Card — 2024/2025</p>
+                  </div>
+                </div>
+                <div class="rp-student-info">
+                  <div class="rp-si-row"><span>Name:</span><strong>Amaka Okafor</strong></div>
+                  <div class="rp-si-row"><span>Adm. No:</span><strong>GHS/2024/001</strong></div>
+                  <div class="rp-si-row"><span>Class:</span><strong>SS 2A</strong></div>
+                  <div class="rp-si-row"><span>Gender:</span><strong>Female</strong></div>
+                </div>
+                <table class="rp-scores">
+                  <thead><tr><th>Subject</th><th>CA</th><th>Exam</th><th>Total</th><th>Grade</th></tr></thead>
+                  <tbody>
+                    <tr><td>Mathematics</td><td>28</td><td>62</td><td>90</td><td><span class="grade-badge grade-a">A</span></td></tr>
+                    <tr><td>English Language</td><td>25</td><td>58</td><td>83</td><td><span class="grade-badge grade-a">A</span></td></tr>
+                    <tr><td>Physics</td><td>22</td><td>55</td><td>77</td><td><span class="grade-badge grade-b">B</span></td></tr>
+                    <tr><td>Chemistry</td><td>20</td><td>50</td><td>70</td><td><span class="grade-badge grade-b">B</span></td></tr>
+                    <tr><td>Biology</td><td>18</td><td>46</td><td>64</td><td><span class="grade-badge grade-c">C</span></td></tr>
+                    <tr><td>Economics</td><td>24</td><td>60</td><td>84</td><td><span class="grade-badge grade-a">A</span></td></tr>
+                  </tbody>
+                </table>
+                <div class="rp-summary">
+                  <div class="rps-item"><span>Total</span><strong>468</strong></div>
+                  <div class="rps-item"><span>Average</span><strong>78.0%</strong></div>
+                  <div class="rps-item"><span>Grade</span><strong>B</strong></div>
+                  <div class="rps-item"><span>Position</span><strong>3rd / 42</strong></div>
+                </div>
+                <div class="rp-comments">
+                  <div class="rp-comment"><strong>Class Teacher:</strong> <em>Excellent performance. Keep it up!</em></div>
+                  <div class="rp-comment"><strong>Principal:</strong> <em>A commendable effort. We are proud of you.</em></div>
+                </div>
+                <div class="rp-footer">
+                  <div class="rp-sig"><div class="sig-line"></div><span>Class Teacher</span></div>
+                  <div class="rp-sig"><div class="sig-line"></div><span>Principal</span></div>
+                  <div class="rp-sig"><div class="sig-line"></div><span>Date</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== ANALYTICS PAGE ======== -->
+      <section class="page" id="page-analytics">
+        <div class="page-header">
+          <div class="ph-left">
+            <h1 class="page-title">Analytics</h1>
+            <p class="page-subtitle">Deep insights into academic performance, attendance and trends.</p>
+          </div>
+          <div class="ph-right">
+            <select class="tbl-filter"><option>3rd Term 2024/25</option><option>2nd Term 2024/25</option></select>
+            <button class="btn btn-primary"><i data-lucide="download"></i> Export</button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="chart-card" style="grid-column: span 2">
+            <div class="chart-header">
+              <div><h3 class="chart-title">Term-on-Term Performance Trend</h3><p class="chart-subtitle">Average class scores across 3 terms</p></div>
+            </div>
+            <canvas id="trendChart" height="120"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header"><div><h3 class="chart-title">Subject Performance</h3><p class="chart-subtitle">School-wide averages</p></div></div>
+            <canvas id="subjectChart" height="160"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header"><div><h3 class="chart-title">Attendance by Class</h3><p class="chart-subtitle">Current term attendance %</p></div></div>
+            <canvas id="attendanceChart" height="160"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header"><div><h3 class="chart-title">Grade Distribution</h3><p class="chart-subtitle">Breakdown by grade band</p></div></div>
+            <canvas id="gradeBarChart" height="160"></canvas>
+          </div>
+        </div>
+
+        <!-- Subject Stats Cards -->
+        <div class="subject-stats-grid">
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(59,130,246,.12); color:#3B82F6"><i data-lucide="calculator"></i></div>
+            <div class="ssc-info"><span>Mathematics</span><strong>68.4%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:68%;background:#3B82F6"></div></div></div>
+          </div>
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(34,197,94,.12); color:#22C55E"><i data-lucide="book"></i></div>
+            <div class="ssc-info"><span>English Language</span><strong>74.2%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:74%;background:#22C55E"></div></div></div>
+          </div>
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(245,158,11,.12); color:#F59E0B"><i data-lucide="zap"></i></div>
+            <div class="ssc-info"><span>Physics</span><strong>61.8%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:62%;background:#F59E0B"></div></div></div>
+          </div>
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(124,58,237,.12); color:#7C3AED"><i data-lucide="flask-conical"></i></div>
+            <div class="ssc-info"><span>Chemistry</span><strong>59.3%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:59%;background:#7C3AED"></div></div></div>
+          </div>
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(239,68,68,.12); color:#EF4444"><i data-lucide="leaf"></i></div>
+            <div class="ssc-info"><span>Biology</span><strong>71.5%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:72%;background:#EF4444"></div></div></div>
+          </div>
+          <div class="subject-stat-card">
+            <div class="ssc-icon" style="background:rgba(96,165,250,.12); color:#60A5FA"><i data-lucide="trending-up"></i></div>
+            <div class="ssc-info"><span>Economics</span><strong>77.9%</strong><div class="ssc-bar"><div class="ssc-fill" style="width:78%;background:#60A5FA"></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SETTINGS PAGE ======== -->
+      <section class="page" id="page-settings">
+        <div class="page-header">
+          <div class="ph-left">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Manage school configuration, themes and preferences.</p>
+          </div>
+          <div class="ph-right">
+            <button class="btn btn-primary"><i data-lucide="save"></i> Save Changes</button>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Settings Sidebar Tabs -->
+          <div class="settings-nav">
+            <button class="set-tab active" data-set="school"><i data-lucide="school"></i> School Settings</button>
+            <button class="set-tab" data-set="theme"><i data-lucide="palette"></i> Theme & Display</button>
+            <button class="set-tab" data-set="profile"><i data-lucide="user"></i> Profile Settings</button>
+            <button class="set-tab" data-set="notif"><i data-lucide="bell"></i> Notifications</button>
+          </div>
+
+          <!-- Settings Panels -->
+          <div class="settings-panel-wrap">
+            <div class="settings-panel active" id="set-school">
+              <div class="rcard">
+                <h3 class="rcard-title">School Information</h3>
+                <div class="form-row"><div class="form-group"><label>School Name</label><input class="form-input" type="text" value="Government High School, Lagos" /></div><div class="form-group"><label>Registration No.</label><input class="form-input" type="text" value="LG/EDU/2003/001" /></div></div>
+                <div class="form-row"><div class="form-group"><label>Address</label><input class="form-input" type="text" value="12 Education Crescent, Ikeja, Lagos" /></div><div class="form-group"><label>Phone</label><input class="form-input" type="text" value="+234 801 234 5678" /></div></div>
+                <div class="form-row"><div class="form-group"><label>Email</label><input class="form-input" type="email" value="admin@ghs.edu.ng" /></div><div class="form-group"><label>Current Session</label><select class="form-input"><option>2024/2025</option><option>2023/2024</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Current Term</label><select class="form-input"><option>3rd Term</option><option>2nd Term</option><option>1st Term</option></select></div><div class="form-group"><label>Max Score (CA)</label><input class="form-input" type="number" value="30" /></div></div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="set-theme">
+              <div class="rcard">
+                <h3 class="rcard-title">Theme & Appearance</h3>
+                <div class="form-group">
+                  <label>Color Mode</label>
+                  <div class="theme-toggle-row">
+                    <button class="theme-option active" onclick="setTheme('light', this)"><i data-lucide="sun"></i> Light Mode</button>
+                    <button class="theme-option" onclick="setTheme('dark', this)"><i data-lucide="moon"></i> Dark Mode</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Primary Accent Color</label>
+                  <div class="color-swatches">
+                    <div class="swatch active" style="background:#3B82F6" data-color="#3B82F6"></div>
+                    <div class="swatch" style="background:#7C3AED" data-color="#7C3AED"></div>
+                    <div class="swatch" style="background:#22C55E" data-color="#22C55E"></div>
+                    <div class="swatch" style="background:#F59E0B" data-color="#F59E0B"></div>
+                    <div class="swatch" style="background:#EF4444" data-color="#EF4444"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Sidebar Style</label>
+                  <select class="form-input"><option>Dark (Default)</option><option>Light</option><option>Gradient Blue</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="set-profile">
+              <div class="rcard">
+                <h3 class="rcard-title">Admin Profile</h3>
+                <div class="profile-upload-row">
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=admin&backgroundColor=b6e3f4" alt="Profile" class="profile-upload-avatar" />
+                  <button class="btn btn-outline">Change Photo</button>
+                </div>
+                <div class="form-row"><div class="form-group"><label>First Name</label><input class="form-input" value="Adebayo" /></div><div class="form-group"><label>Last Name</label><input class="form-input" value="Kolawole" /></div></div>
+                <div class="form-row"><div class="form-group"><label>Email</label><input class="form-input" type="email" value="admin@ghs.edu.ng" /></div><div class="form-group"><label>Phone</label><input class="form-input" value="+234 811 234 5678" /></div></div>
+                <div class="form-row"><div class="form-group"><label>Role</label><select class="form-input"><option>Super Admin</option><option>Admin</option><option>Teacher</option></select></div><div class="form-group"><label>Password</label><input class="form-input" type="password" placeholder="••••••••" /></div></div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="set-notif">
+              <div class="rcard">
+                <h3 class="rcard-title">Notification Preferences</h3>
+                <div class="notif-row"><div class="notif-info"><strong>Result Upload Alerts</strong><p>Get notified when new results are uploaded</p></div><label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+                <div class="notif-row"><div class="notif-info"><strong>Student Enrollment</strong><p>Alerts when a new student is added</p></div><label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+                <div class="notif-row"><div class="notif-info"><strong>Low Attendance Warnings</strong><p>Alert when class attendance drops below 75%</p></div><label class="toggle-switch"><input type="checkbox" /><span class="toggle-slider"></span></label></div>
+                <div class="notif-row"><div class="notif-info"><strong>Email Notifications</strong><p>Receive summary emails weekly</p></div><label class="toggle-switch"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+                <div class="notif-row"><div class="notif-info"><strong>SMS Alerts</strong><p>Get SMS for critical events</p></div><label class="toggle-switch"><input type="checkbox" /><span class="toggle-slider"></span></label></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== PLACEHOLDER PAGES ======== -->
+      <section class="page" id="page-students"><div class="page-header"><div class="ph-left"><h1 class="page-title">Students</h1><p class="page-subtitle">Manage all student records and enrolments.</p></div><div class="ph-right"><button class="btn btn-primary"><i data-lucide="user-plus"></i> Add Student</button></div></div><div class="placeholder-content"><i data-lucide="users" style="width:64px;height:64px;opacity:.15"></i><p>Students module — connect your backend to load records.</p></div></section>
+      <section class="page" id="page-subjects"><div class="page-header"><div class="ph-left"><h1 class="page-title">Subjects</h1><p class="page-subtitle">Manage school subjects and curriculum.</p></div></div><div class="placeholder-content"><i data-lucide="book-open" style="width:64px;height:64px;opacity:.15"></i><p>Subjects module — coming soon.</p></div></section>
+      <section class="page" id="page-teachers"><div class="page-header"><div class="ph-left"><h1 class="page-title">Teachers</h1><p class="page-subtitle">Manage teaching staff and assignments.</p></div></div><div class="placeholder-content"><i data-lucide="user-check" style="width:64px;height:64px;opacity:.15"></i><p>Teachers module — coming soon.</p></div></section>
+      <section class="page" id="page-attendance"><div class="page-header"><div class="ph-left"><h1 class="page-title">Attendance</h1><p class="page-subtitle">Track and manage daily student attendance.</p></div></div><div class="placeholder-content"><i data-lucide="calendar-check" style="width:64px;height:64px;opacity:.15"></i><p>Attendance module — coming soon.</p></div></section>
+      <section class="page" id="page-messages"><div class="page-header"><div class="ph-left"><h1 class="page-title">Messages</h1><p class="page-subtitle">Internal messaging and announcements.</p></div></div><div class="placeholder-content"><i data-lucide="message-square" style="width:64px;height:64px;opacity:.15"></i><p>Messages module — coming soon.</p></div></section>
+
+    </div><!-- End .page-wrapper -->
+  </main><!-- End .main-content -->
+
+  <!-- ==================== MODAL: Add/Edit Result ==================== -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="resultModal">
+      <div class="modal-header">
+        <h2 class="modal-title">Edit Result</h2>
+        <button class="modal-close" id="modalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group"><label>Student Name</label><input class="form-input" type="text" id="modalStudentName" /></div>
+          <div class="form-group"><label>Class</label><select class="form-input" id="modalClass"><option>SS 1A</option><option>SS 2A</option><option>SS 3A</option><option>JSS 1B</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Total Score</label><input class="form-input" type="number" id="modalTotal" /></div>
+          <div class="form-group"><label>Average (%)</label><input class="form-input" type="number" id="modalAvg" /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Grade</label><select class="form-input" id="modalGrade"><option>A</option><option>B</option><option>C</option><option>F</option></select></div>
+          <div class="form-group"><label>Remark</label><input class="form-input" type="text" id="modalRemark" /></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalSave"><i data-lucide="save"></i> Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <i data-lucide="check-circle" class="toast-icon"></i>
+    <span class="toast-msg" id="toastMsg">Saved successfully!</span>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- supabase.js must come before script.js -->
+  <script src="supabase.js"></script>
+
+  <!-- Lucide Icons (must load before script.js) -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Dashboard Script -->
+  <script src="script.js"></script>
+</body>
+</html>

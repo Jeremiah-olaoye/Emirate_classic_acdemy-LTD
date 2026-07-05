@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduTrack Pro — Login</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+  <style>
+    /* ── Design tokens ─────────────────────────────────── */
+    :root {
+      --primary:      #3B82F6;
+      --primary-dark: #2563EB;
+      --accent:       #7C3AED;
+      --bg:           #F8FAFC;
+      --surface:      #FFFFFF;
+      --border:       #E2E8F0;
+      --text:         #1E293B;
+      --text-muted:   #64748B;
+      --danger:       #EF4444;
+      --success:      #22C55E;
+      --radius:       14px;
+      --shadow:       0 4px 24px rgba(0,0,0,.09);
+      --shadow-lg:    0 16px 48px rgba(0,0,0,.14);
+    }
+    [data-theme="dark"] {
+      --bg:       #0D1117;
+      --surface:  #161B22;
+      --border:   #30363D;
+      --text:     #E6EDF3;
+      --text-muted:#8B949E;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      transition: background .3s, color .3s;
+    }
+
+    /* ── Left panel (branding) ─────────────────────────── */
+    .auth-left {
+      flex: 1;
+      background: linear-gradient(145deg, #0F172A 0%, #1E3A5F 50%, #0F172A 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(59,130,246,.18) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(124,58,237,.15) 0%, transparent 50%);
+    }
+    .auth-left-inner { position: relative; z-index: 1; text-align: center; max-width: 420px; }
+
+    .auth-logo {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(59,130,246,.4);
+    }
+    .auth-logo svg { width: 34px; height: 34px; }
+
+    .auth-brand { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .auth-tagline { font-size: .95rem; color: #94A3B8; line-height: 1.6; margin-bottom: 40px; }
+
+    /* Feature list */
+    .feature-list { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 14px; }
+    .feature-list li {
+      display: flex; align-items: center; gap: 12px;
+      color: #CBD5E1; font-size: .88rem;
+    }
+    .feature-icon {
+      width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+
+    /* Floating decorative shapes */
+    .deco { position: absolute; border-radius: 50%; opacity: .06; }
+    .deco-1 { width: 300px; height: 300px; background: #3B82F6; top: -80px; right: -80px; }
+    .deco-2 { width: 200px; height: 200px; background: #7C3AED; bottom: -60px; left: -60px; }
+
+    /* ── Right panel (form) ────────────────────────────── */
+    .auth-right {
+      width: 460px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+      background: var(--surface);
+      position: relative;
+    }
+
+    .auth-form-wrap { width: 100%; max-width: 360px; }
+
+    /* Theme toggle */
+    .auth-theme-btn {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 8px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1rem; color: var(--text-muted);
+      transition: all .2s;
+    }
+    .auth-theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Tabs: Login / Reset */
+    .auth-tabs {
+      display: flex; gap: 0;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .auth-tab {
+      flex: 1; padding: 8px; border: none; background: none;
+      border-radius: 7px; font-family: 'Inter', sans-serif;
+      font-size: .83rem; font-weight: 600; color: var(--text-muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .auth-tab.active { background: var(--surface); color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+    /* Form elements */
+    .form-title { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .form-desc  { font-size: .83rem; color: var(--text-muted); margin-bottom: 24px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block; font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .5px;
+      color: var(--text-muted); margin-bottom: 6px;
+    }
+    .field-wrap { position: relative; }
+    .field-icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: .95rem; pointer-events: none;
+    }
+    .field input {
+      width: 100%; padding: 10px 12px 10px 38px;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-family: 'Inter', sans-serif; font-size: .9rem;
+      color: var(--text); background: var(--bg);
+      transition: all .2s; outline: none;
+    }
+    [data-theme="dark"] .field input { background: #0D1117; }
+    .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59,130,246,.15); background: var(--surface); }
+    .field input.error { border-color: var(--danger); }
+
+    /* Eye toggle for password */
+    .eye-btn {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--text-muted); font-size: .95rem; padding: 2px;
+    }
+    .eye-btn:hover { color: var(--primary); }
+
+    /* Remember + Forgot row */
+    .field-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .remember { display: flex; align-items: center; gap: 7px; font-size: .82rem; color: var(--text-muted); cursor: pointer; }
+    .remember input { accent-color: var(--primary); width: 15px; height: 15px; cursor: pointer; }
+    .forgot-link { font-size: .82rem; color: var(--primary); font-weight: 600; text-decoration: none; }
+    .forgot-link:hover { opacity: .75; }
+
+    /* Error message */
+    .auth-error {
+      display: none;
+      background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+      color: #DC2626; border-radius: 9px;
+      padding: 10px 14px; font-size: .82rem;
+      margin-bottom: 16px; display: none;
+      align-items: center; gap: 8px;
+    }
+    .auth-error.show { display: flex; }
+
+    /* Success message */
+    .auth-success {
+      background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3);
+      color: #16a34a; border-radius: 9px;
+      padding: 10px 14px; font-size: .82rem;
+      margin-bottom: 16px; display: none;
+      align-items: center; gap: 8px;
+    }
+    .auth-success.show { display: flex; }
+
+    /* Submit button */
+    .btn-auth {
+      width: 100%; padding: 11px;
+      background: var(--primary); color: white;
+      border: none; border-radius: 9px;
+      font-family: 'Inter', sans-serif; font-size: .92rem; font-weight: 700;
+      cursor: pointer; transition: all .22s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-auth:hover { background: var(--primary-dark); box-shadow: 0 4px 14px rgba(59,130,246,.4); transform: translateY(-1px); }
+    .btn-auth:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* Spinner */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .btn-auth.loading .spinner { display: block; }
+    .btn-auth.loading .btn-text { opacity: 0; position: absolute; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Divider */
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--text-muted); font-size: .78rem; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Demo credentials */
+    .demo-creds {
+      background: rgba(59,130,246,.06);
+      border: 1px solid rgba(59,130,246,.15);
+      border-radius: 9px; padding: 12px 14px;
+      font-size: .78rem; color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .demo-creds strong { color: var(--primary); }
+    .demo-fill-btn {
+      background: none; border: none; color: var(--primary);
+      font-size: .78rem; font-weight: 600; cursor: pointer;
+      text-decoration: underline; padding: 0;
+    }
+
+    /* Footer note */
+    .auth-footer { margin-top: 24px; text-align: center; font-size: .78rem; color: var(--text-muted); }
+
+    /* ── Responsive ────────────────────────────────────── */
+    @media (max-width: 900px) { .auth-left { display: none; } }
+    @media (max-width: 500px) {
+      .auth-right { width: 100%; padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left branding panel -->
+  <div class="auth-left">
+    <div class="deco deco-1"></div>
+    <div class="deco deco-2"></div>
+    <div class="auth-left-inner">
+      <div class="auth-logo">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M8 22 L16 10 L24 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="16" cy="10" r="2.5" fill="white"/>
+          <rect x="10" y="20" width="12" height="2.5" rx="1.25" fill="white" opacity="0.7"/>
+        </svg>
+      </div>
+      <h1 class="auth-brand">EduTrack Pro</h1>
+      <p class="auth-tagline">Complete school result management system — manage students, publish results, and generate report cards with ease.</p>
+
+      <ul class="feature-list">
+        <li>
+          <div class="feature-icon" style="background:rgba(59,130,246,.15)"><i class="fa-solid fa-chart-area"></i></div>
+          <span>Real-time analytics and performance tracking</span>
+        </li>
+        <li>
+          <div class="feature-icon" style="background:rgba(34,197,94,.15)"><i class="fa-solid fa-book"></i></div>
+          <span>Automated report card generation and PDF export</span>
+        </li>
+        <li>
+          <div class="feature-icon" style="background:rgba(245,158,11,.15)"><i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <span>Manage students, teachers and subjects</span>
+        </li>
+        <li>
+          <div class="feature-icon" style="background:rgba(124,58,237,.15)"><i class="fa-solid fa-lock"></i></div>
+          <span>Secure role-based access for admin and teachers</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="auth-right">
+
+    <!-- Theme toggle -->
+    <button class="auth-theme-btn" id="themeBtn" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+
+    <div class="auth-form-wrap">
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin"  onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab"        id="tabReset"  onclick="switchTab('reset')">Reset Password</button>
+      </div>
+
+      <!-- ── LOGIN FORM ── -->
+      <div id="loginForm">
+        <h2 class="form-title">Welcome back <i class="fa-solid fa-hand"></i></h2>
+        <p class="form-desc">Sign in to your EduTrack admin dashboard.</p>
+
+        <div class="auth-error" id="loginError">
+          <span>⚠</span><span id="loginErrorMsg">Invalid email or password.</span>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉</span>
+            <input type="email" id="loginEmail" placeholder="admin@school.edu.ng" autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <div class="field-wrap">
+            <span class="field-icon"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password" />
+            <button class="eye-btn" id="eyeBtn" type="button" title="Show/hide password"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe" /> Remember me
+          </label>
+          <a href="#" class="forgot-link" onclick="switchTab('reset'); return false">Forgot password?</a>
+        </div>
+
+        <button class="btn-auth" id="loginBtn" onclick="handleLogin()">
+          <div class="spinner" id="loginSpinner"></div>
+          <span class="btn-text">Sign In to Dashboard</span>
+        </button>
+
+        <div class="demo-creds">
+          <strong>Demo credentials</strong><br/>
+          Email: <strong>admin@ghs.edu.ng</strong> &nbsp;|&nbsp; Password: <strong>Admin@123</strong><br/>
+          <button class="demo-fill-btn" onclick="fillDemo()">Click to auto-fill →</button>
+        </div>
+      </div>
+
+      <!-- ── RESET PASSWORD FORM ── -->
+      <div id="resetForm" style="display:none">
+        <h2 class="form-title">Reset Password <i class="fa-solid fa-key"></i></h2>
+        <p class="form-desc">Enter your email and we'll send a reset link.</p>
+
+        <div class="auth-error" id="resetError">
+          <span>⚠</span><span id="resetErrorMsg">Something went wrong.</span>
+        </div>
+        <div class="auth-success" id="resetSuccess">
+          <span>✓</span><span>Reset link sent! Check your email inbox.</span>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <div class="field-wrap">
+            <span class="field-icon">✉</span>
+            <input type="email" id="resetEmail" placeholder="admin@school.edu.ng" />
+          </div>
+        </div>
+
+        <button class="btn-auth" id="resetBtn" onclick="handleReset()">
+          <div class="spinner" id="resetSpinner"></div>
+          <span class="btn-text">Send Reset Link</span>
+        </button>
+
+        <p class="auth-footer" style="margin-top:16px">
+          <a href="#" class="forgot-link" onclick="switchTab('login'); return false">← Back to Sign In</a>
+        </p>
+      </div>
+
+      <p class="auth-footer">
+        EduTrack Pro v2.0 &nbsp;·&nbsp; &copy; 2025 Government High School
+      </p>
+    </div>
+  </div>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+
+  <script>
+    /* ── Tab switching ───────────────────────────────────── */
+    function switchTab(tab) {
+      document.getElementById('loginForm').style.display = tab === 'login' ? '' : 'none';
+      document.getElementById('resetForm').style.display = tab === 'reset' ? '' : 'none';
+      document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
+      document.getElementById('tabReset').classList.toggle('active', tab === 'reset');
+      clearErrors();
+    }
+
+    function clearErrors() {
+      ['loginError','resetError','resetSuccess'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('show');
+      });
+    }
+
+    /* ── Demo fill ───────────────────────────────────────── */
+    function fillDemo() {
+      document.getElementById('loginEmail').value    = 'admin@ghs.edu.ng';
+      document.getElementById('loginPassword').value = 'Admin@123';
+    }
+
+    /* ── Eye toggle ──────────────────────────────────────── */
+    document.getElementById('eyeBtn').addEventListener('click', () => {
+      const pwd = document.getElementById('loginPassword');
+      const btn = document.getElementById('eyeBtn');
+      if (pwd.type === 'password') { pwd.type = 'text';     btn.textContent = '<i class="fa-solid fa-eye-slash"></i>'; }
+      else                         { pwd.type = 'password'; btn.textContent = '<iclass="fa-solid fa-eye"></i>'; }
+    });
+
+    /* ── Theme toggle ────────────────────────────────────── */
+    const themeBtn = document.getElementById('themeBtn');
+    const saved    = localStorage.getItem('edutrack-theme') || 'light';
+    applyLoginTheme(saved);
+    themeBtn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme');
+      applyLoginTheme(cur === 'dark' ? 'light' : 'dark');
+    });
+    function applyLoginTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('edutrack-theme', t);
+      themeBtn.textContent = t === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon">';
+    }
+
+    /* ── Enter key submits ───────────────────────────────── */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const tab = document.getElementById('loginForm').style.display !== 'none' ? 'login' : 'reset';
+        if (tab === 'login') handleLogin();
+        else                 handleReset();
+      }
+    });
+
+    /* ── LOGIN ───────────────────────────────────────────── */
+    async function handleLogin() {
+      clearErrors();
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+      const btn      = document.getElementById('loginBtn');
+
+      /* Basic validation */
+      if (!email || !password) {
+        showLoginError('Please enter your email and password.');
+        return;
+      }
+
+      setLoading(btn, 'loginSpinner', true);
+
+      try {
+        const result = await EduAuth.signIn(email, password);
+
+        if (result.error) {
+          showLoginError(result.error);
+          setLoading(btn, 'loginSpinner', false);
+          return;
+        }
+
+        /* Save remember preference */
+        if (remember) localStorage.setItem('edutrack-remember', 'true');
+
+        /* Redirect to dashboard */
+        window.location.href = 'index.html';
+
+      } catch (err) {
+        showLoginError('Connection error. Please check your internet and try again.');
+        setLoading(btn, 'loginSpinner', false);
+      }
+    }
+
+    /* ── PASSWORD RESET ──────────────────────────────────── */
+    async function handleReset() {
+      clearErrors();
+      const email = document.getElementById('resetEmail').value.trim();
+      const btn   = document.getElementById('resetBtn');
+
+      if (!email) {
+        const el = document.getElementById('resetError');
+        document.getElementById('resetErrorMsg').textContent = 'Please enter your email address.';
+        el.classList.add('show');
+        return;
+      }
+
+      setLoading(btn, 'resetSpinner', true);
+
+      try {
+        const result = await EduAuth.resetPassword(email);
+        setLoading(btn, 'resetSpinner', false);
+
+        if (result.error) {
+          const el = document.getElementById('resetError');
+          document.getElementById('resetErrorMsg').textContent = result.error;
+          el.classList.add('show');
+        } else {
+          document.getElementById('resetSuccess').classList.add('show');
+        }
+      } catch (err) {
+        setLoading(btn, 'resetSpinner', false);
+        const el = document.getElementById('resetError');
+        document.getElementById('resetErrorMsg').textContent = 'Connection error. Try again.';
+        el.classList.add('show');
+      }
+    }
+
+    function showLoginError(msg) {
+      document.getElementById('loginErrorMsg').textContent = msg;
+      document.getElementById('loginError').classList.add('show');
+    }
+
+    function setLoading(btn, spinnerId, on) {
+      btn.disabled = on;
+      btn.classList.toggle('loading', on);
+      document.getElementById(spinnerId).style.display = on ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
